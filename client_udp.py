@@ -15,6 +15,7 @@ class ClientUDP:
 
 	def recv(self):
 		msg_from_server, server_address = self.sock.recvfrom(1500)
+		print(f"O servidor enviou: {msg_from_server.decode()}")
 
 def main():
 	print("Bem vindo ao Quizz Competitivo!")
