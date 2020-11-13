@@ -1,4 +1,5 @@
 from socket import socket, AF_INET, SOCK_DGRAM
+import time
 
 class ClientUDP:
 
@@ -18,7 +19,6 @@ class ClientUDP:
 		print(f"Servidor mandou {msg_from_server.decode()}")
 
 def main():
-
 	print("Bem vindo ao Quizz Competitivo!\nPara participar informe alguns dados...")
 	name = input("Digite seu nome: ")
 	server_ip, server_port = input("Endereço IP do servidor: "), int(input("Porta do servidor: "))
@@ -27,8 +27,5 @@ def main():
 
 if __name__ == "__main__":
 	name, server_ip, server_port = main()
-	sock = ClientUDP(name, server_ip, server_port)
+	client = ClientUDP(name, server_ip, server_port)
 	menu = input("Deseja iniciar a partida (s/n)? >>> ")
-	
-	if menu.lower() == "s" or "n":
-		sock.send(name, client_address)
