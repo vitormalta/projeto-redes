@@ -1,4 +1,6 @@
 from socket import socket, AF_INET, SOCK_DGRAM
+from threading import Thread
+import json
 import time
 
 class ServerUDP():
@@ -7,29 +9,34 @@ class ServerUDP():
 		self.host = host
 		self.port = port
 		self.server = socket(AF_INET, SOCK_DGRAM) 
-		#É um socket que recebe como parâmetro a pilha de protocolo e qual o protocolo da camada de transporte irá ser utilizado
 		self.server.bind((self.host, self.port))
-		#Vinculamos o socket a algum endereço IP e porta, o método recebe uma tupla onde o primeiro índice representa o endereço IP e o segundo índice é a porta
-		self.server.listen(5)
-		#O servidor não inicia a comunicação porém escuta requisições constantemente, o método listen pode receber como argumento a quantidade de requisições aceitas
-		self.clients_list = []
+		self.clients_list, self.num_of_clients = list(), 0 
+		Thread(target=self.recv, args=()).start()
+
+	def get_clients_list(self):
+		return self.clients_list
+
+	def player_manager(self, info):
+		if self.num_of_clients < 5:
+			self.clients_list.append(json.loads(info))
+			self.num_of_clients += 1
+			print(self.clients_list)
+		else:
+			print("Limite máximo de participantes atingido!")
 
 	def recv(self):
 		while True:
-			print("Aguardando requisição...")
+			print("Aguardando requisições...")
 			data, client = self.server.recvfrom(1500)
-			#Retorna uma tupla contendo o objeto em bytes lidos de um socket UDP e o endereço do cliente socket
 			if not data:
 				break
 			else:
-				print(f"{client} enviou: {data.decode()}...")
-				answer = input(">>> ")
-				self.send(answer, client)
-		self.server.close()
+				for i in json.loads(data.decode()):
+					if "name" in i:
+						self.player_manager(data)
 
 	def send(self, data, address):
 		self.server.sendto(data.encode(), address)
 
 if __name__ == "__main__":
-	server = ServerUDP('localhost', 8000)
-	server.recv()
+	server = ServerUDP('localhost', 8080)
