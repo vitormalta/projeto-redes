@@ -2,6 +2,7 @@ from socket import socket, AF_INET, SOCK_DGRAM
 from threading import Thread
 import json
 import time
+import os
 
 class ServerUDP():
 
@@ -22,21 +23,29 @@ class ServerUDP():
 			self.num_of_clients += 1
 			print(self.clients_list)
 		else:
-			print("Limite máximo de participantes atingido!")
+			print('Limite máximo de participantes atingido!')
+
+	@staticmethod		
+	def read_file():
+		path = os.getcwd()
+		file = open(path + '/tuplas.txt', 'r', encoding='utf-8')
+		for i in file:
+			#print(file.read())
+		file.flush()
 
 	def recv(self):
 		while True:
-			print("Aguardando requisições...")
+			print('Aguardando requisições...')
 			data, client = self.server.recvfrom(1500)
 			if not data:
 				break
 			else:
 				for i in json.loads(data.decode()):
-					if "name" in i:
+					if 'name' in i:
 						self.player_manager(data)
 
 	def send(self, data, address):
 		self.server.sendto(data.encode(), address)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	server = ServerUDP('localhost', 8080)

@@ -19,17 +19,17 @@ class ClientUDP:
 
 	def recv(self):
 		msg_from_server, server_address = self.sock.recvfrom(1500)
-		print(f"Mensagem do servidor: {msg_from_server.decode()}")
+		print(f'Mensagem do servidor: {msg_from_server.decode()}')
 
 def main():
-	print("Bem vindo ao Quizz Competitivo!\nPara participar informe alguns dados...")
-	name = input("Digite seu nome: ")
-	server_ip, server_port = input("Endereço IP do servidor: "), int(input("Porta do servidor: "))
+	print('Bem vindo ao Quizz Competitivo!\nPara participar informe alguns dados...')
+	name = input('Digite seu nome: ')
+	server_ip, server_port = input('Endereço IP do servidor: '), int(input('Porta do servidor: '))
 	return name, server_ip, server_port
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	name, server_ip, server_port = main()
 	client = ClientUDP(name, server_ip, server_port)
-	menu = input("Deseja iniciar a partida (s/n)? >>> ")
+	menu = input('Deseja iniciar a partida (s/n)? >>> ')
 	info = dict(name=name, ip=client.get_ip())
 	client.send(json.dumps(info))

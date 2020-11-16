@@ -1,4 +1,4 @@
-[('Arquitetura que utiliza comunicação direta entre duplas de hospedeiros denominado pares...', 'p2p'),
+('Arquitetura que utiliza comunicação direta entre duplas de hospedeiros denominado pares...', 'p2p'),
 ('Qual a denominação dada a interface entre um processo e a rede?', 'sockets'),
 ('Orgão responsavel por desenvolver padrões da internet', 'ietf'),
 ('Define formato e ordem de mensagens trocadas entidades comunicantes,
@@ -18,4 +18,4 @@ bem como as ações realizadas na transmissão e/ou no recebimento de uma mensag
 ('', ''),
 ('', ''),
 ('', ''),
-('', '')]
+('', '')
