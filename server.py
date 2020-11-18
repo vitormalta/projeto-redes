@@ -60,4 +60,4 @@ class ServerUDP():
 		self.server.sendto(data.encode(), address)
 
 if __name__ == '__main__':
-	server_udp = ServerUDP('localhost', 8080)
+	server_udp = ServerUDP('localhost', 5000)

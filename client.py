@@ -1,15 +1,17 @@
 from socket import socket, AF_INET, SOCK_DGRAM
 from threading import Thread
+import random
 import json
 import time
 
 class ClientUDP():
 
-	def __init__(self, name, server_ip, server_port):
+	def __init__(self, name, server_ip, server_port, **kwargs):
 		self.sock = socket(AF_INET, SOCK_DGRAM)
-		self.dest = (server_ip, server_port)
+		self.server = (server_ip, server_port)
 		self.name = name
-		Thread(target=self.recv_data, args=()).start()
+		self.sock.bind((kwargs.get('ip', host), kwargs.get('port', port)))
+		Thread(target=self.recv_data, args=((self.sock,))).start()
 
 	def get_ip(self):
 		self.sock.connect(('8.8.8.8', 80))
@@ -20,7 +22,7 @@ class ClientUDP():
 		return self.name
 
 	def send_data(self, data):
-		self.sock.sendto(data.encode(), self.dest)
+		self.sock.sendto(data.encode('utf-8'), self.server)
 
 	def recv_data(self):
 		while True:
@@ -42,7 +44,9 @@ def main():
 
 if __name__ == '__main__':
 	name, server_ip, server_port = main()
-	client_udp = ClientUDP(name, server_ip, server_port)
+	host = socket.gethostbyname(socket.gethostname())
+    port = random.randint(6000,10000)
+	client_udp = ClientUDP(name, server_ip, server_port, host, port)
 	info = dict(name=name, ip=client_udp.get_ip())
 	client_udp.send_data(json.dumps(info))
 	menu = input('Deseja iniciar a partida (s/n)? >>> ').lower()
